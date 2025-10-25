@@ -1,0 +1,2 @@
+# ImageCompressCpp
+Compress images fast
