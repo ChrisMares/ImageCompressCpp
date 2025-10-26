@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include <algorithm>
+#include <mutex>
+#include <execution>
 #include "image_processor.h"
 
 using std::cout;
@@ -97,21 +100,14 @@ int main(int argc, char *argv[], char *envp[])
     cout << "Found " << allImgFiles.size() << " image files in directory: " << _imgdir << endl;
 
     unsigned int originalFileCount = allImgFiles.size();
-    unsigned int processedFileCount = 0;
-    for (const string &filepath : allImgFiles)
-    {
-        const string &extension = std::filesystem::path(filepath).extension().string();
+    std::atomic<unsigned int> processedFileCount{0};
 
-        try
-        {
-            ResizeImage(filepath, _outdir, _size,  _quality);
-            cout << ++processedFileCount << " of " << originalFileCount << endl;
-        }
-        catch (const std::exception &e)
-        {
-            cout << "ERROR **** processing file " << filepath << ": " << e.what() << endl;
-        }
-    }
+    std::for_each(std::execution::par_unseq, allImgFiles.begin(), allImgFiles.end(), 
+        [&_outdir, &_size, &_quality, &processedFileCount, &originalFileCount](const string &filepath) { 
+            ResizeImage(filepath, _outdir, _size, _quality);
+            processedFileCount++;
+            //cout << "Processed file " << processedFileCount.load() << " / " << originalFileCount << "\r" << std::flush;
+        });
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;

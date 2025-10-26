@@ -14,65 +14,74 @@
 #include <iostream>
 #include <filesystem>
 
-using std::string;
 using std::cout;
 using std::endl;
+using std::string;
 
-
-void ResizeImage(const std::string &filepath, const std::string &_outdir, int _size,  int _quality)
+void ResizeImage(const std::string &filepath, const std::string &_outdir, int _size, int _quality)
 {
-    int width, height, channels;
-    unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
-
-    if (input_pixels == nullptr)
+    try
     {
-        cout << "Failed to load image: " << filepath << endl;
+        int width, height, channels;
+        unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+
+        if (input_pixels == nullptr)
+        {
+            cout << "Failed to load image: " << filepath << endl;
+            return;
+        }
+
+        float aspect_ratio = static_cast<float>(width) / height;
+        int new_width = (int)(width * (_size / 100.0f));
+        int new_height = (int)(height * (_size / 100.0f));
+
+        // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
+        stbir_pixel_layout pixel_layout;
+        if (channels == 4)
+            pixel_layout = STBIR_RGBA;
+        else
+            pixel_layout = STBIR_RGB;
+
+        unsigned char *output_pixels = stbir_resize_uint8_srgb(
+            input_pixels, 
+            width, 
+            height,
+             0,
+            NULL, 
+            new_width, 
+            new_height, 
+            0,
+            pixel_layout);
+
+        if (output_pixels)
+        {
+            const string filename = std::filesystem::path(filepath).stem().string();
+            const string extension = std::filesystem::path(filepath).extension().string();
+            const string outputFile = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
+
+            if (extension == ".png")
+            {
+                int stride_in_bytes = new_width * channels;
+                stbi_write_png(outputFile.c_str(), new_width, new_height, channels, output_pixels, stride_in_bytes);
+            }
+            else if (extension == ".jpeg" || extension == ".jpg")
+            {
+                stbi_write_jpg(outputFile.c_str(), new_width, new_height, channels, output_pixels, _quality);
+            }
+        }
+        else
+        {
+            cout << "ERROR **** Failed to resize image: " << filepath << endl;
+        }
+
+        STBIR_FREE(output_pixels, NULL); // Free the resize output
+        stbi_image_free(input_pixels);   // Free the original image
+    }
+    catch (const std::exception &e)
+    {
+        cout << "Exception occurred while processing image: " << filepath << ". Error: " << e.what() << endl;
         return;
     }
-
-    float aspect_ratio = static_cast<float>(width) / height;
-    int new_width = (int)(width * (_size / 100.0f));
-    int new_height = (int)(height * (_size / 100.0f));
-
-    // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
-    stbir_pixel_layout pixel_layout;
-    if (channels == 4)
-    {
-        pixel_layout = STBIR_RGBA;
-    }
-    else
-    {
-        pixel_layout = STBIR_RGB;
-    }
-
-    unsigned char *output_pixels = stbir_resize_uint8_srgb(
-        input_pixels, width, height, 0,
-        NULL, new_width, new_height, 0,
-        pixel_layout);
-
-    if (output_pixels)
-    {
-        const string filename = std::filesystem::path(filepath).stem().string();
-        const string extension = std::filesystem::path(filepath).extension().string();
-        const string outputFile = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
-
-        if (extension == ".png")
-        {
-            int stride_in_bytes = new_width * channels;
-            stbi_write_png(outputFile.c_str(), new_width, new_height, channels, output_pixels, stride_in_bytes);
-        }
-        else if (extension == ".jpeg" || extension == ".jpg")
-        {
-            stbi_write_jpg(outputFile.c_str(), new_width, new_height, channels, output_pixels, _quality);
-        }
-    }
-    else
-    {
-        cout << "ERROR **** Failed to resize image: " << filepath << endl;
-    }
-
-    STBIR_FREE(output_pixels, NULL); // Free the resize output
-    stbi_image_free(input_pixels);   // Free the original image
 
     return;
 }
