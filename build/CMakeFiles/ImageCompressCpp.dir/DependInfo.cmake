@@ -8,7 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/chris/git/ImageCompressCpp/src/file_helpers.cpp" "CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o" "gcc" "CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o.d"
+  "/home/chris/git/ImageCompressCpp/src/image_processor.cpp" "CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o" "gcc" "CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o.d"
   "/home/chris/git/ImageCompressCpp/src/main.cpp" "CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o" "gcc" "CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o.d"
   )
 

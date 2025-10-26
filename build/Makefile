@@ -129,29 +129,29 @@ ImageCompressCpp/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/build
 .PHONY : ImageCompressCpp/fast
 
-src/file_helpers.o: src/file_helpers.cpp.o
-.PHONY : src/file_helpers.o
+src/image_processor.o: src/image_processor.cpp.o
+.PHONY : src/image_processor.o
 
 # target to build an object file
-src/file_helpers.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o
-.PHONY : src/file_helpers.cpp.o
+src/image_processor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o
+.PHONY : src/image_processor.cpp.o
 
-src/file_helpers.i: src/file_helpers.cpp.i
-.PHONY : src/file_helpers.i
+src/image_processor.i: src/image_processor.cpp.i
+.PHONY : src/image_processor.i
 
 # target to preprocess a source file
-src/file_helpers.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.i
-.PHONY : src/file_helpers.cpp.i
+src/image_processor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.i
+.PHONY : src/image_processor.cpp.i
 
-src/file_helpers.s: src/file_helpers.cpp.s
-.PHONY : src/file_helpers.s
+src/image_processor.s: src/image_processor.cpp.s
+.PHONY : src/image_processor.s
 
 # target to generate assembly for a file
-src/file_helpers.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.s
-.PHONY : src/file_helpers.cpp.s
+src/image_processor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressCpp.dir/build.make CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.s
+.PHONY : src/image_processor.cpp.s
 
 src/main.o: src/main.cpp.o
 .PHONY : src/main.o
@@ -186,9 +186,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ImageCompressCpp"
-	@echo "... src/file_helpers.o"
-	@echo "... src/file_helpers.i"
-	@echo "... src/file_helpers.s"
+	@echo "... src/image_processor.o"
+	@echo "... src/image_processor.i"
+	@echo "... src/image_processor.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

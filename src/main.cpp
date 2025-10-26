@@ -14,8 +14,6 @@
 #include <vector>
 #include <filesystem>
 
-#include "file_helpers.h"
-
 using std::cout;
 using std::endl;
 using std::string;
@@ -102,9 +100,17 @@ int main(int argc, char *argv[], char *envp[])
     unsigned int processedFileCount = 0;
     for (const string &filepath : allImgFiles)
     {
+        if(!_imgname.empty())
+        {
+            // process only specified image
+            if (std::filesystem::path(filepath).filename() != _imgname)
+            {
+                continue;
+            }
+        }
+
         try
         {
-            const string &extension = std::filesystem::path(filepath).extension().string();
 
             int width, height, channels;
             unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
@@ -133,11 +139,14 @@ int main(int argc, char *argv[], char *envp[])
                 pixel_layout           // STBIR_RGB (3 channels, no alpha processing)
             );
 
+        
             if (output_pixels)
             {
-                string filename = std::filesystem::path(filepath).stem().string();
-                string outputPath = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
-                // Where compression can happen via quality parameter
+                const string &extension = std::filesystem::path(filepath).extension().string();
+                const string &filename = std::filesystem::path(filepath).stem().string();
+                const string &outputPath = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
+
+                // Compression happens here via the quality parameter
                 if (extension == ".png")
                 {
                     // convert png to jpg

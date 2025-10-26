@@ -83,30 +83,30 @@ CMakeFiles/ImageCompressCpp.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ImageCompressCpp.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/chris/git/ImageCompressCpp/src/main.cpp -o CMakeFiles/ImageCompressCpp.dir/src/main.cpp.s
 
-CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o: CMakeFiles/ImageCompressCpp.dir/flags.make
-CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o: /home/chris/git/ImageCompressCpp/src/file_helpers.cpp
-CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o: CMakeFiles/ImageCompressCpp.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/chris/git/ImageCompressCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o -MF CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o.d -o CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o -c /home/chris/git/ImageCompressCpp/src/file_helpers.cpp
+CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o: CMakeFiles/ImageCompressCpp.dir/flags.make
+CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o: /home/chris/git/ImageCompressCpp/src/image_processor.cpp
+CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o: CMakeFiles/ImageCompressCpp.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/chris/git/ImageCompressCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o -MF CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o.d -o CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o -c /home/chris/git/ImageCompressCpp/src/image_processor.cpp
 
-CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/chris/git/ImageCompressCpp/src/file_helpers.cpp > CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.i
+CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/chris/git/ImageCompressCpp/src/image_processor.cpp > CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.i
 
-CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/chris/git/ImageCompressCpp/src/file_helpers.cpp -o CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.s
+CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/chris/git/ImageCompressCpp/src/image_processor.cpp -o CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.s
 
 # Object files for target ImageCompressCpp
 ImageCompressCpp_OBJECTS = \
 "CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o" \
-"CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o"
+"CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o"
 
 # External object files for target ImageCompressCpp
 ImageCompressCpp_EXTERNAL_OBJECTS =
 
 ImageCompressCpp: CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o
-ImageCompressCpp: CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o
+ImageCompressCpp: CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o
 ImageCompressCpp: CMakeFiles/ImageCompressCpp.dir/build.make
 ImageCompressCpp: CMakeFiles/ImageCompressCpp.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/chris/git/ImageCompressCpp/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable ImageCompressCpp"

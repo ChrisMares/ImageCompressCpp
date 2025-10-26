@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o"
-  "CMakeFiles/ImageCompressCpp.dir/src/file_helpers.cpp.o.d"
+  "CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o"
+  "CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o.d"
   "CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o"
   "CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o.d"
   "ImageCompressCpp"
