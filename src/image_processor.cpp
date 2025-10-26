@@ -1,29 +1,78 @@
+// --- STB Implementation ---
+// This is the ONE place this block lives
+#define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
-#include "stb_image_resize2.h"
-#include <string> 
+
+#define STB_IMAGE_RESIZE_IMPLEMENTATION
+#include "stb_image_resize2.h" // or stb_image_resize2.h
+// --- End STB Implementation ---
+
 #include "image_processor.h"
+#include <iostream>
+#include <filesystem>
 
 using std::string;
+using std::cout;
+using std::endl;
 
 
-// void ResizeImage(int percentage, const string& inputPath, const string& outputPath) {
-//     int width, height, channels;
-//     unsigned char* input_pixels = stbi_load(inputPath.c_str(), &width, &height, &channels, 0);
-//     if (input_pixels == nullptr) {
-//         throw std::runtime_error("Failed to load image: " + inputPath);
-//     }
+void ResizeImage(const std::string &filepath, const std::string &_outdir, int _size,  int _quality)
+{
+    int width, height, channels;
+    unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
-//     int new_width = width * percentage / 100;
-//     int new_height = height * percentage / 100;
-//     unsigned char* output_pixels = new unsigned char[new_width * new_height * channels];
+    if (input_pixels == nullptr)
+    {
+        cout << "Failed to load image: " << filepath << endl;
+        return;
+    }
 
-//     stbir_resize_uint8(input_pixels, width, height, 0,
-//                        output_pixels, new_width, new_height, 0,
-//                        channels);
+    float aspect_ratio = static_cast<float>(width) / height;
+    int new_width = (int)(width * (_size / 100.0f));
+    int new_height = (int)(height * (_size / 100.0f));
 
-//     stbi_write_jpg(outputPath.c_str(), new_width, new_height, channels, output_pixels, 90);
+    // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
+    stbir_pixel_layout pixel_layout;
+    if (channels == 4)
+    {
+        pixel_layout = STBIR_RGBA;
+    }
+    else
+    {
+        pixel_layout = STBIR_RGB;
+    }
 
-//     stbi_image_free(input_pixels);
-//     delete[] output_pixels;
-// }
+    unsigned char *output_pixels = stbir_resize_uint8_srgb(
+        input_pixels, width, height, 0,
+        NULL, new_width, new_height, 0,
+        pixel_layout);
+
+    if (output_pixels)
+    {
+        const string filename = std::filesystem::path(filepath).stem().string();
+        const string extension = std::filesystem::path(filepath).extension().string();
+        const string outputFile = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
+
+        if (extension == ".png")
+        {
+            int stride_in_bytes = new_width * channels;
+            stbi_write_png(outputFile.c_str(), new_width, new_height, channels, output_pixels, stride_in_bytes);
+        }
+        else if (extension == ".jpeg" || extension == ".jpg")
+        {
+            stbi_write_jpg(outputFile.c_str(), new_width, new_height, channels, output_pixels, _quality);
+        }
+    }
+    else
+    {
+        cout << "ERROR **** Failed to resize image: " << filepath << endl;
+    }
+
+    STBIR_FREE(output_pixels, NULL); // Free the resize output
+    stbi_image_free(input_pixels);   // Free the original image
+
+    return;
+}

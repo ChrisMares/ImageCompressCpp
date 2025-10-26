@@ -1,4 +1,3 @@
-#include "stb_image.h"
-#include "stb_image_write.h"
-#include "stb_image_resize2.h"
 #include <string>
+
+void ResizeImage(const std::string &filepath, const std::string &_outdir, int _size,  int _quality);

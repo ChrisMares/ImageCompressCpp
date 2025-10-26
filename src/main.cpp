@@ -1,18 +1,7 @@
-// --- STB Implementation ---
-// This is the ONE place this block lives
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
-
-#define STB_IMAGE_RESIZE_IMPLEMENTATION
-#include "stb_image_resize2.h" // or stb_image_resize2.h
-// --- End STB Implementation ---
-
 #include <iostream>
 #include <vector>
 #include <filesystem>
+#include "image_processor.h"
 
 using std::cout;
 using std::endl;
@@ -20,6 +9,8 @@ using std::string;
 
 int main(int argc, char *argv[], char *envp[])
 {
+    //add a stopwatch
+    auto start = std::chrono::high_resolution_clock::now();
     cout << "ImageCompressCpp - starting ...." << endl;
 
     // CLI Args
@@ -113,65 +104,19 @@ int main(int argc, char *argv[], char *envp[])
 
         try
         {
-            // Load image - returns unsigned char* to pixel data
-            int width, height, channels;
-            unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
-
-            if (input_pixels == nullptr)
-            {
-                cout << "Failed to load image: " << filepath << endl;
-                continue;
-            }
-
-            float aspect_ratio = static_cast<float>(width) / height;
-            int new_width = (int)(width * (_size / 100.0f));
-            int new_height = (int)(height * (_size / 100.0f));
-
-            // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
-            stbir_pixel_layout pixel_layout;
-            if (channels == 4) {
-                pixel_layout = STBIR_RGBA;
-            } else {
-                pixel_layout = STBIR_RGB;
-            }
-
-            unsigned char *output_pixels = stbir_resize_uint8_srgb(
-                input_pixels, width, height, 0,
-                NULL, new_width, new_height, 0,
-                pixel_layout
-            );
-        
-            if (output_pixels)
-            {
-                const string filename = std::filesystem::path(filepath).stem().string();
-                const string extension = std::filesystem::path(filepath).extension().string();
-                const string outputPath = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
-
-                if (extension == ".png")
-                {
-                    int stride_in_bytes = new_width * channels;
-                    stbi_write_png(outputPath.c_str(), new_width, new_height, channels, output_pixels, stride_in_bytes);
-                }
-                else if (extension == ".jpeg" || extension == ".jpg")
-                {
-                    stbi_write_jpg(outputPath.c_str(), new_width, new_height, channels, output_pixels, _quality);
-                }
-
-                cout << ++processedFileCount << " of " << originalFileCount << ": " << outputPath << endl;
-            }
-            else
-            {
-                cout << "ERROR **** Failed to resize image: " << filepath << endl;
-            }
-
-            STBIR_FREE(output_pixels, NULL); //Free the resize output         
-            stbi_image_free(input_pixels); //Free the original image
+            ResizeImage(filepath, _outdir, _size,  _quality);
+            cout << ++processedFileCount << " of " << originalFileCount << endl;
         }
         catch (const std::exception &e)
         {
             cout << "ERROR **** processing file " << filepath << ": " << e.what() << endl;
         }
     }
+
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> elapsed = end - start;
+    cout << "Elapsed time: " << elapsed.count() << " seconds." << endl;
+    cout << "ImageCompressCpp - completed processing " << processedFileCount << " files." << endl;
 
     return 0;
 }
