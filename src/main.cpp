@@ -100,6 +100,8 @@ int main(int argc, char *argv[], char *envp[])
     unsigned int processedFileCount = 0;
     for (const string &filepath : allImgFiles)
     {
+        const string &extension = std::filesystem::path(filepath).extension().string();
+
         if(!_imgname.empty())
         {
             // process only specified image
@@ -111,7 +113,7 @@ int main(int argc, char *argv[], char *envp[])
 
         try
         {
-
+            // Load image - returns unsigned char* to pixel data
             int width, height, channels;
             unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
 
@@ -121,36 +123,34 @@ int main(int argc, char *argv[], char *envp[])
                 continue;
             }
 
-            float aspect_ratio = (float)width / (float)height;
+            float aspect_ratio = static_cast<float>(width) / height;
+            int new_width = (int)(width * (_size / 100.0f));
+            int new_height = (int)(height * (_size / 100.0f));
 
-            int new_width = (float)width * (float)_size / 100.0f;
-            int new_height = (float)height * (float)_size / 100.0f;
+            // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
+            stbir_pixel_layout pixel_layout;
+            if (channels == 4) {
+                pixel_layout = STBIR_RGBA;
+            } else {
+                pixel_layout = STBIR_RGB;
+            }
 
-            // normal rgb layout
-            stbir_pixel_layout pixel_layout = STBIR_RGB;
-
-            unsigned char *output_pixels = stbir_resize_uint8_linear(
-                input_pixels,          // Input buffer
-                width, height,         // Input dimensions
-                0,                     // Input stride
-                NULL,                  // Output buffer (will be allocated by function)
-                new_width, new_height, // Output dimensions
-                0,                     // Output stride
-                pixel_layout           // STBIR_RGB (3 channels, no alpha processing)
+            unsigned char *output_pixels = stbir_resize_uint8_srgb(
+                input_pixels, width, height, 0,
+                NULL, new_width, new_height, 0, // Pass NULL to allocate a new buffer
+                pixel_layout
             );
-
         
             if (output_pixels)
             {
-                const string &extension = std::filesystem::path(filepath).extension().string();
-                const string &filename = std::filesystem::path(filepath).stem().string();
-                const string &outputPath = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
+                const string filename = std::filesystem::path(filepath).stem().string();
+                const string extension = std::filesystem::path(filepath).extension().string();
+                const string outputPath = _outdir + "/" + filename + "_" + std::to_string(_size) + "_" + std::to_string(_quality) + extension;
 
-                // Compression happens here via the quality parameter
                 if (extension == ".png")
                 {
-                    // convert png to jpg
-                    stbi_write_png(outputPath.c_str(), new_width, new_height, channels, output_pixels, _quality);
+                    int stride_in_bytes = new_width * channels;
+                    stbi_write_png(outputPath.c_str(), new_width, new_height, channels, output_pixels, stride_in_bytes);
                 }
                 else if (extension == ".jpeg" || extension == ".jpg")
                 {
@@ -164,8 +164,8 @@ int main(int argc, char *argv[], char *envp[])
                 cout << "Failed to resize image: " << filepath << endl;
             }
 
-            stbi_image_free(output_pixels);
-            stbi_image_free(input_pixels);
+            STBIR_FREE(output_pixels, NULL); //Free the resize output         
+            stbi_image_free(input_pixels); //Free the original image
         }
         catch (const std::exception &e)
         {
