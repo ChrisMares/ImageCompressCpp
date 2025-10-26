@@ -1,9 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <filesystem>
-#include <algorithm>
+#include <thread>
+#include <queue>
 #include <mutex>
-#include <execution>
+#include <condition_variable>
+#include <atomic>
 #include "image_processor.h"
 
 using std::cout;
@@ -22,11 +24,7 @@ int main(int argc, char *argv[], char *envp[])
     int _size = 50;
     int _quality = 100;
     string _imgname;
-
-    // print all envp
-    //  for (char** env = envp; *env != nullptr; ++env) {
-    //      cout << "Env: " << *env << endl;
-    //  }
+    unsigned int _threads = std::thread::hardware_concurrency();
 
     // process CLI args
     for (int i = 0; i < argc; ++i)
@@ -41,7 +39,8 @@ int main(int argc, char *argv[], char *envp[])
             cout << "--size : Specify the size percentage for resizing (default is 50%)." << endl;
             cout << "--quality : Specify the JPEG quality (default is 100)." << endl;
             cout << "--imgname : (Optional) Specify a single image filename to process." << endl;
-            cout << "  ImageCompressCpp --imgdir /path/to/images --outdir /path/to/output --size 50 --quality 90" << endl;
+            cout << "--threads : Number of threads (default: CPU cores)." << endl;
+            cout << "  ImageCompressCpp --imgdir /path/to/images --outdir /path/to/output --size 50 --quality 90 --threads 8" << endl;
             return 0;
         }
         else if (arg == "--imgdir") _imgdir = argv[++i];
@@ -49,6 +48,7 @@ int main(int argc, char *argv[], char *envp[])
         else if (arg == "--size") _size = std::stoi(argv[++i]);
         else if (arg == "--quality") _quality = std::stoi(argv[++i]);
         else if (arg == "--imgname") _imgname = argv[++i];
+        else if (arg == "--threads") _threads = std::stoi(argv[++i]);
     }
 
     if (_imgdir.empty() || _outdir.empty() || _size <= 0 || _quality <= 0)
@@ -98,16 +98,39 @@ int main(int argc, char *argv[], char *envp[])
     }
 
     cout << "Found " << allImgFiles.size() << " image files in directory: " << _imgdir << endl;
+    cout << "Using " << _threads << " threads for processing." << endl;
 
     unsigned int originalFileCount = allImgFiles.size();
     std::atomic<unsigned int> processedFileCount{0};
+    std::atomic<unsigned int> fileIndex{0};
 
-    std::for_each(std::execution::par_unseq, allImgFiles.begin(), allImgFiles.end(), 
-        [&_outdir, &_size, &_quality, &processedFileCount, &originalFileCount](const string &filepath) { 
-            ResizeImage(filepath, _outdir, _size, _quality);
+    // Lamda function. Pass referecne to local varriables as needed 
+    auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, _size, _quality, &processedFileCount]() 
+    {
+        while (true) {
+            int index = fileIndex.fetch_add(1);
+            if (index >= allImgFiles.size()) {
+                break;
+            }
+            
+            ResizeImage(allImgFiles[index], _outdir, _size, _quality);
             processedFileCount++;
-            //cout << "Processed file " << processedFileCount.load() << " / " << originalFileCount << "\r" << std::flush;
-        });
+        }
+    };
+
+    // Create and launch threads
+    std::vector<std::thread> threads;
+    threads.reserve(_threads);
+    for (unsigned int i = 0; i < _threads; ++i)
+    {
+        threads.emplace_back(resize_img_processor); //adds the worker function directly to the vector without extra copy
+    }
+
+    for (std::thread &thread : threads)
+    {
+        //Main function waits for all threads to finish here
+        thread.join();
+    }
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
