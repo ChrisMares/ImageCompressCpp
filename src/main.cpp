@@ -161,7 +161,7 @@ int main(int argc, char *argv[], char *envp[])
             }
             else
             {
-                cout << "Failed to resize image: " << filepath << endl;
+                cout << "ERROR **** Failed to resize image: " << filepath << endl;
             }
 
             STBIR_FREE(output_pixels, NULL); //Free the resize output         
