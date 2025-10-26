@@ -83,6 +83,15 @@ int main(int argc, char *argv[], char *envp[])
         if (entry.is_regular_file())
         {
             string filepath = entry.path().string();
+            if(!_imgname.empty())
+            {
+                // if imgname is specified, only add that file if it matches
+                if (entry.path().filename() == _imgname)
+                {
+                    allImgFiles.push_back(filepath);
+                }
+                continue;
+            }
             if (entry.path().extension() == ".jpg" || entry.path().extension() == ".jpeg")
             {
                 allImgFiles.push_back(filepath);
@@ -101,15 +110,6 @@ int main(int argc, char *argv[], char *envp[])
     for (const string &filepath : allImgFiles)
     {
         const string &extension = std::filesystem::path(filepath).extension().string();
-
-        if(!_imgname.empty())
-        {
-            // process only specified image
-            if (std::filesystem::path(filepath).filename() != _imgname)
-            {
-                continue;
-            }
-        }
 
         try
         {
@@ -137,7 +137,7 @@ int main(int argc, char *argv[], char *envp[])
 
             unsigned char *output_pixels = stbir_resize_uint8_srgb(
                 input_pixels, width, height, 0,
-                NULL, new_width, new_height, 0, // Pass NULL to allocate a new buffer
+                NULL, new_width, new_height, 0,
                 pixel_layout
             );
         
