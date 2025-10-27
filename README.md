@@ -2,7 +2,7 @@
 
 A self-contained C++ project for resizing and compressing images using the stb library.
 
-##Running:
+## Running:
 Windows (quick example: copying the .exe to where your files are and saving output to a folder called /sm in that directory)
 ```bash
 .\ImageCompressWin.exe --imgdir ./ --outdir ./sm --size 50 --quality 50
