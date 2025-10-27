@@ -33,14 +33,13 @@
 │   │   │   └── src
 │   │   │       ├── file_helpers.cpp.o
 │   │   │       ├── file_helpers.cpp.o.d
+│   │   │       ├── image_processor.cpp.o
+│   │   │       ├── image_processor.cpp.o.d
 │   │   │       ├── main.cpp.o
 │   │   │       └── main.cpp.o.d
 │   │   ├── Makefile2
 │   │   ├── Makefile.cmake
 │   │   ├── pkgRedirects
-│   │   ├── Progress
-│   │   │   ├── 1
-│   │   │   └── count.txt
 │   │   ├── progress.marks
 │   │   └── TargetDirectories.txt
 │   ├── cmake_install.cmake
@@ -48,15 +47,14 @@
 │   └── Makefile
 ├── CMakeLists.txt
 ├── include
-│   └── file_helpers.h
-├── README.md
-├── src
-│   ├── a.out
-│   ├── file_helpers.cpp
-│   ├── main.cpp
+│   ├── image_processor.h
 │   ├── stb_image.h
 │   ├── stb_image_resize2.h
 │   └── stb_image_write.h
+├── README.md
+├── src
+│   ├── image_processor.cpp
+│   └── main.cpp
 └── treefile
 
-14 directories, 46 files
+13 directories, 45 files
