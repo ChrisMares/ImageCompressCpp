@@ -35,3 +35,13 @@ chmod +x build_win_release.sh
 ```bash
 ./build_linux_debug.sh
 ```
+
+### example run from project root (linux)
+```bash
+./build-linux-debug/ImageCompress --outdir /home/chris/Pictures/website/sm --imgdir /home/chris/Pictures/website/ --size 50 --quality 25 --threads 28
+```
+
+### example run with 'wine' from project root (linux)
+```bash
+wine ./build-windows/ImageCompressWin.exe --outdir /home/chris/Pictures/website/sm --imgdir /home/chris/Pictures/website/ --size 50 --quality 25 --threads 28
+```

@@ -31,6 +31,15 @@ target_link_libraries(${EXE_NAME} PRIVATE
     Threads::Threads
 )
 
+# Windows-specific static linking
+if(WIN32)
+    target_link_libraries(${EXE_NAME} PRIVATE
+        -static-libgcc
+        -static-libstdc++
+        -static
+    )
+endif()
+
 # Link math library only on native Linux (not MinGW)
 if (UNIX AND NOT MINGW)
     target_link_libraries(${EXE_NAME} PRIVATE m)
