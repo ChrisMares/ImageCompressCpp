@@ -14,7 +14,7 @@ using std::string;
 
 int main(int argc, char *argv[], char *envp[])
 {
-    //add a stopwatch
+    // add a stopwatch
     auto start = std::chrono::high_resolution_clock::now();
     cout << "ImageCompressCpp - starting ...." << endl;
 
@@ -25,6 +25,7 @@ int main(int argc, char *argv[], char *envp[])
     int _quality = 100;
     string _imgname;
     unsigned int _threads = std::thread::hardware_concurrency();
+    unsigned int _hardware_cores = std::thread::hardware_concurrency();
 
     // process CLI args
     for (int i = 0; i < argc; ++i)
@@ -43,14 +44,31 @@ int main(int argc, char *argv[], char *envp[])
             cout << "  ImageCompressCpp --imgdir /path/to/images --outdir /path/to/output --size 50 --quality 90 --threads 8" << endl;
             return 0;
         }
-        else if (arg == "--imgdir") _imgdir = argv[++i];
-        else if (arg == "--outdir") _outdir = argv[++i];
-        else if (arg == "--size") _size = std::stoi(argv[++i]);
-        else if (arg == "--quality") _quality = std::stoi(argv[++i]);
-        else if (arg == "--imgname") _imgname = argv[++i];
-        else if (arg == "--threads") _threads = std::stoi(argv[++i]);
-    }
+        else if (arg == "--imgdir")
+            _imgdir = argv[++i];
+        else if (arg == "--outdir")
+            _outdir = argv[++i];
+        else if (arg == "--size")
+            _size = std::stoi(argv[++i]);
+        else if (arg == "--quality")
+            _quality = std::stoi(argv[++i]);
+        else if (arg == "--imgname")
+            _imgname = argv[++i];
+        else if (arg == "--threads")
+        {
+            int thread_arg = std::stoi(argv[++i]);
+            if (thread_arg > 0)
+            {
+                _threads = (unsigned int)(thread_arg);
+                if (thread_arg > std::thread::hardware_concurrency())
+                {
+                    _threads = std::thread::hardware_concurrency();
+                }
+            }
+        }
+    } // End of CLI parsing loop
 
+    // Validation (moved outside the loop)
     if (_imgdir.empty() || _outdir.empty() || _size <= 0 || _quality <= 0)
     {
         cout << "Error:  --imgdir, --outdir, --size, and --quality are required parameters." << endl;
@@ -77,7 +95,7 @@ int main(int argc, char *argv[], char *envp[])
         if (entry.is_regular_file())
         {
             string filepath = entry.path().string();
-            if(!_imgname.empty())
+            if (!_imgname.empty())
             {
                 // if imgname is specified, only add that file if it matches
                 if (entry.path().filename() == _imgname)
@@ -104,33 +122,65 @@ int main(int argc, char *argv[], char *envp[])
     std::atomic<unsigned int> processedFileCount{0};
     std::atomic<unsigned int> fileIndex{0};
 
-    // Lamda function. Pass referecne to local varriables as needed 
-    auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, _size, _quality, &processedFileCount]() 
+    // adjust threads to match file count if less files than threads
+    if (allImgFiles.size() < _threads)
     {
-        while (true) {
+        _threads = allImgFiles.size();
+    }
+
+    // on a higher core cpus, leave two cores free for OS and Monitor thread
+    if (_threads == _hardware_cores && _hardware_cores > 7)
+    {
+        _threads -= 2;
+    }
+
+    // Lamda function. Pass referecne to local varriables as needed
+    auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, &_size, &_quality, &processedFileCount]()
+    {
+        // Thread will run forever until all files are processed, either by this thread or others
+        while (true)
+        {
+            // Each thread will fetch a thread-safe unique index to process
             int index = fileIndex.fetch_add(1);
-            if (index >= allImgFiles.size()) {
+            if (index >= allImgFiles.size())
+            {
                 break;
             }
-            
+
             ResizeImage(allImgFiles[index], _outdir, _size, _quality);
             processedFileCount++;
         }
     };
+
+    auto monitor_worker = [&processedFileCount, &originalFileCount]()
+    {
+        // cout percent complete in a progress bar
+        while (processedFileCount < originalFileCount)
+        {
+            float percent = (float)processedFileCount.load() / originalFileCount * 100.0f;
+            cout << "\rProgress: " << processedFileCount << "/" << originalFileCount << " (" << percent << "%)" << std::flush;
+            std::this_thread::sleep_for(std::chrono::milliseconds(40));
+        }
+        cout << "\rProgress: " << processedFileCount << "/" << originalFileCount << " (100%)" << endl;
+    };
+
+    std::thread monitor_thread = std::thread(monitor_worker);
 
     // Create and launch threads
     std::vector<std::thread> threads;
     threads.reserve(_threads);
     for (unsigned int i = 0; i < _threads; ++i)
     {
-        threads.emplace_back(resize_img_processor); //adds the worker function directly to the vector without extra copy
+        threads.emplace_back(resize_img_processor); // adds the worker function directly to the vector without extra copy
     }
 
+    // Main function waits for all threads to finish here
     for (std::thread &thread : threads)
     {
-        //Main function waits for all threads to finish here
         thread.join();
     }
+
+    monitor_thread.join(); // Wait for monitor thread to finish
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
