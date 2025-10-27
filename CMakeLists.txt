@@ -4,22 +4,34 @@ project(ImageCompressCpp VERSION 1.0)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-# Define where the compiled executables should be placed
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/build")
+# Set the executable name based on the target OS
+if(WIN32)
+    set(EXE_NAME ImageCompressWin)
+else()
+    set(EXE_NAME ImageCompress)
+endif()
 
-# Define the executable target
-add_executable(ImageCompressCpp
+# Use the variable for the executable name
+add_executable(${EXE_NAME}
     src/main.cpp
     src/image_processor.cpp
 )
 
-# Tell CMake where to find all your headers
-target_include_directories(ImageCompressCpp PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include   
-    ${CMAKE_CURRENT_SOURCE_DIR}           # For stb_image.h, etc.
+# Use the variable for the target
+target_include_directories(${EXE_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
-# Link the math library (needed for stb on Linux)
-if (UNIX)
-    target_link_libraries(ImageCompressCpp PRIVATE m)
+# Find and link the thread library (pthreads) for std::thread
+find_package(Threads REQUIRED)
+
+# Link libraries
+target_link_libraries(${EXE_NAME} PRIVATE
+    Threads::Threads
+)
+
+# Link math library only on native Linux (not MinGW)
+if (UNIX AND NOT MINGW)
+    target_link_libraries(${EXE_NAME} PRIVATE m)
 endif()

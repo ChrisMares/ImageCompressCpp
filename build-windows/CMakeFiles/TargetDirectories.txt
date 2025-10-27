@@ -1,0 +1,3 @@
+/home/chris/git/ImageCompressCpp/build-windows/CMakeFiles/ImageCompressWin.dir
+/home/chris/git/ImageCompressCpp/build-windows/CMakeFiles/edit_cache.dir
+/home/chris/git/ImageCompressCpp/build-windows/CMakeFiles/rebuild_cache.dir

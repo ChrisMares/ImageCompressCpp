@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/ImageCompressCpp.dir/src/main.cpp.o CMakeFiles/ImageCompressCpp.dir/src/image_processor.cpp.o -o ImageCompressCpp  -lm 

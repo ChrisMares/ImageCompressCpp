@@ -1,14 +1,37 @@
-
 # ImageCompressCpp
 
-A self-contained C++ project using OpenCV for image compression.
-
-# Generate actual build files
-cmake -S . -B build
-
+A self-contained C++ project for resizing and compressing images using the stb library.
 
 ## Build Instructions
-1. Clone the repository:
-   ```bash
-   git clone --recursive https://github.com/yourusername/ImageCompressCpp.git
-   cd ImageCompressCpp
+
+This project uses shell scripts to simplify the build process for different platforms and configurations.
+
+### Prerequisites (for Windows Cross-Compilation)
+
+Before building the Windows executable on Linux, install the MinGW-w64 toolchain:
+
+```bash
+sudo apt update
+sudo apt install g++-mingw-w64-x86-64
+```
+
+### Running the builds
+
+Make all shell scripts executable
+```bash
+chmod +x build_all.sh
+chmod +x build_linux_debug.sh
+chmod +x build_linux_release.sh
+chmod +x build_win_release.sh
+```
+
+### Build all (build linux-release, linux-debug, windows-release)
+
+```bash
+./build_all.sh
+```
+
+### building locally on linux for debugging
+```bash
+./build_linux_debug.sh
+```

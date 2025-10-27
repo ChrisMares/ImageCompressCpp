@@ -115,9 +115,6 @@ int main(int argc, char *argv[], char *envp[])
         }
     }
 
-    cout << "Found " << allImgFiles.size() << " image files in directory: " << _imgdir << endl;
-    cout << "Using " << _threads << " threads for processing." << endl;
-
     unsigned int originalFileCount = allImgFiles.size();
     std::atomic<unsigned int> processedFileCount{0};
     std::atomic<unsigned int> fileIndex{0};
@@ -133,6 +130,10 @@ int main(int argc, char *argv[], char *envp[])
     {
         _threads -= 2;
     }
+
+    cout << "Found " << allImgFiles.size() << " image files in directory: " << _imgdir << endl;
+    cout << "Moving resized images to output directory: " << _outdir << endl;
+    cout << "Using " << _threads << " threads for processing." << endl;
 
     // Lamda function. Pass referecne to local varriables as needed
     auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, &_size, &_quality, &processedFileCount]()
@@ -152,12 +153,15 @@ int main(int argc, char *argv[], char *envp[])
         }
     };
 
+    // Lamda function for monitoring progress
     auto monitor_worker = [&processedFileCount, &originalFileCount]()
     {
-        // cout percent complete in a progress bar
+        // cout percent complete and progress
         while (processedFileCount < originalFileCount)
         {
             float percent = (float)processedFileCount.load() / originalFileCount * 100.0f;
+            //\r at the start moves the cursor back to the beginning of the line
+            //std::flush immediatley pushes the output to the terminal
             cout << "\rProgress: " << processedFileCount << "/" << originalFileCount << " (" << percent << "%)" << std::flush;
             std::this_thread::sleep_for(std::chrono::milliseconds(40));
         }
