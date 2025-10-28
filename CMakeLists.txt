@@ -15,6 +15,7 @@ endif()
 add_executable(${EXE_NAME}
     src/main.cpp
     src/image_processor.cpp
+    src/arg_helper.cpp
 )
 
 # Use the variable for the target

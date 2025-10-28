@@ -18,12 +18,17 @@ using std::cout;
 using std::endl;
 using std::string;
 
-void ResizeImage(const std::string &filepath, const std::string &_outdir, int _size, int _quality)
+void ResizeImage(const std::string &filepath,
+                 const std::string &_outdir,
+                 int _size,
+                 int _quality,
+                 int _width,
+                 int _height)
 {
     try
     {
-        int width, height, channels;
-        unsigned char *input_pixels = stbi_load(filepath.c_str(), &width, &height, &channels, 0);
+        int orig_width, orig_height, channels;
+        unsigned char *input_pixels = stbi_load(filepath.c_str(), &orig_width, &orig_height, &channels, 0);
 
         if (input_pixels == nullptr)
         {
@@ -31,9 +36,27 @@ void ResizeImage(const std::string &filepath, const std::string &_outdir, int _s
             return;
         }
 
-        float aspect_ratio = static_cast<float>(width) / height;
-        int new_width = (int)(width * (_size / 100.0f));
-        int new_height = (int)(height * (_size / 100.0f));
+        float aspect_ratio = (float)orig_width / (float)orig_height;
+
+        int new_width, new_height;
+
+        //only one of these size params will be set or there is an error thrown validating the params
+        
+        if(_width != 0)
+        {
+            new_width = _width;
+            new_height = static_cast<int>(_width / aspect_ratio);
+        }
+        else if(_height != 0)
+        {
+            new_height = _height;
+            new_width = static_cast<int>(_height * aspect_ratio);
+        }
+        else //size
+        {
+            new_width = (int)(orig_width * (_size / 100.0f));
+            new_height = (int)(orig_height * (_size / 100.0f));
+        }
 
         // Based on the channels choose pixel layout. PNGs can have 4 channels, that is the layering effect of the png
         stbir_pixel_layout pixel_layout;
@@ -43,13 +66,13 @@ void ResizeImage(const std::string &filepath, const std::string &_outdir, int _s
             pixel_layout = STBIR_RGB;
 
         unsigned char *output_pixels = stbir_resize_uint8_srgb(
-            input_pixels, 
-            width, 
-            height,
-             0,
-            NULL, 
-            new_width, 
-            new_height, 
+            input_pixels,
+            orig_width,
+            orig_height,
+            0,
+            NULL,
+            new_width,
+            new_height,
             0,
             pixel_layout);
 

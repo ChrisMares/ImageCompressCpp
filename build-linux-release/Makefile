@@ -129,6 +129,30 @@ ImageCompress/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/build
 .PHONY : ImageCompress/fast
 
+src/arg_helper.o: src/arg_helper.cpp.o
+.PHONY : src/arg_helper.o
+
+# target to build an object file
+src/arg_helper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.o
+.PHONY : src/arg_helper.cpp.o
+
+src/arg_helper.i: src/arg_helper.cpp.i
+.PHONY : src/arg_helper.i
+
+# target to preprocess a source file
+src/arg_helper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.i
+.PHONY : src/arg_helper.cpp.i
+
+src/arg_helper.s: src/arg_helper.cpp.s
+.PHONY : src/arg_helper.s
+
+# target to generate assembly for a file
+src/arg_helper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.s
+.PHONY : src/arg_helper.cpp.s
+
 src/image_processor.o: src/image_processor.cpp.o
 .PHONY : src/image_processor.o
 
@@ -186,6 +210,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ImageCompress"
+	@echo "... src/arg_helper.o"
+	@echo "... src/arg_helper.i"
+	@echo "... src/arg_helper.s"
 	@echo "... src/image_processor.o"
 	@echo "... src/image_processor.i"
 	@echo "... src/image_processor.s"

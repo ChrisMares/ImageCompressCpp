@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Linux Debug",
+            "type": "shell",
+            "command": "./build_linux_debug.sh",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Build the project using build_linux_debug.sh script."
+        }
+    ]
+}

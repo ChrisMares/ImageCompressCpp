@@ -129,6 +129,30 @@ ImageCompressWin/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/build
 .PHONY : ImageCompressWin/fast
 
+src/arg_helper.obj: src/arg_helper.cpp.obj
+.PHONY : src/arg_helper.obj
+
+# target to build an object file
+src/arg_helper.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.obj
+.PHONY : src/arg_helper.cpp.obj
+
+src/arg_helper.i: src/arg_helper.cpp.i
+.PHONY : src/arg_helper.i
+
+# target to preprocess a source file
+src/arg_helper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.i
+.PHONY : src/arg_helper.cpp.i
+
+src/arg_helper.s: src/arg_helper.cpp.s
+.PHONY : src/arg_helper.s
+
+# target to generate assembly for a file
+src/arg_helper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.s
+.PHONY : src/arg_helper.cpp.s
+
 src/image_processor.obj: src/image_processor.cpp.obj
 .PHONY : src/image_processor.obj
 
@@ -186,6 +210,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... ImageCompressWin"
+	@echo "... src/arg_helper.obj"
+	@echo "... src/arg_helper.i"
+	@echo "... src/arg_helper.s"
 	@echo "... src/image_processor.obj"
 	@echo "... src/image_processor.i"
 	@echo "... src/image_processor.s"

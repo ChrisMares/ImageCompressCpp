@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.obj"
+  "CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.obj.d"
   "CMakeFiles/ImageCompressWin.dir/src/image_processor.cpp.obj"
   "CMakeFiles/ImageCompressWin.dir/src/image_processor.cpp.obj.d"
   "CMakeFiles/ImageCompressWin.dir/src/main.cpp.obj"

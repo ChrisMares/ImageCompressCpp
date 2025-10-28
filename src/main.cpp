@@ -7,10 +7,31 @@
 #include <condition_variable>
 #include <atomic>
 #include "image_processor.h"
+#include "arg_helper.h"
 
 using std::cout;
 using std::endl;
 using std::string;
+
+void print_progress(int processed, int total) {
+
+    const short bar_width = 60;
+    float progress = (float)processed / total;
+
+    if (progress < 0.0f) progress = 0.0f;
+    if (progress > 1.0f) progress = 1.0f;
+
+    int pos = (int)(bar_width * progress);
+    int percent = (int)(progress * 100.0);
+
+    // Create the bar string
+    std::string bar_filled(pos, '#');
+    std::string bar_empty(bar_width - pos, ' ');
+
+    // Print the bar with \r to return to the start of the line
+    std::cout << "[" << bar_filled << bar_empty << "] " << percent << " % (" << processed << "/" << total << ")" << "\r";
+    std::cout.flush(); // Ensure it prints immediately
+}
 
 int main(int argc, char *argv[], char *envp[])
 {
@@ -21,11 +42,14 @@ int main(int argc, char *argv[], char *envp[])
     // CLI Args
     string _imgdir;
     string _outdir;
-    int _size = 50;
+    int _size = 100;
     int _quality = 100;
+    int _width = 0;
+    int _height = 0;
     string _imgname;
+
     unsigned int _threads = std::thread::hardware_concurrency();
-    unsigned int _hardware_cores = std::thread::hardware_concurrency();
+    unsigned int _hardware_cores = _threads;
 
     // process CLI args
     for (int i = 0; i < argc; ++i)
@@ -33,23 +57,19 @@ int main(int argc, char *argv[], char *envp[])
         const string &arg = string(argv[i]);
         if (arg.rfind("--help", 0) == 0 || arg.rfind("-h", 0) == 0)
         {
-            cout << "This program compresses images in a specified directory." << endl;
-            cout << "It will only compress jpeg and png images." << endl;
-            cout << "--imgdir : Specify the input image directory." << endl;
-            cout << "--outdir : Specify the output directory." << endl;
-            cout << "--size : Specify the size percentage for resizing (default is 50%)." << endl;
-            cout << "--quality : Specify the JPEG quality (default is 100)." << endl;
-            cout << "--imgname : (Optional) Specify a single image filename to process." << endl;
-            cout << "--threads : Number of threads (default: CPU cores)." << endl;
-            cout << "  ImageCompressCpp --imgdir /path/to/images --outdir /path/to/output --size 50 --quality 90 --threads 8" << endl;
+            print_help_msg();
             return 0;
         }
         else if (arg == "--imgdir")
             _imgdir = argv[++i];
         else if (arg == "--outdir")
             _outdir = argv[++i];
-        else if (arg == "--size")
+        else if (arg == "--size-factor")
             _size = std::stoi(argv[++i]);
+        else if (arg == "--width")
+            _width = std::stoi(argv[++i]);
+        else if (arg == "--height")
+            _height = std::stoi(argv[++i]);
         else if (arg == "--quality")
             _quality = std::stoi(argv[++i]);
         else if (arg == "--imgname")
@@ -59,30 +79,18 @@ int main(int argc, char *argv[], char *envp[])
             int thread_arg = std::stoi(argv[++i]);
             if (thread_arg > 0)
             {
-                _threads = (unsigned int)(thread_arg);
-                if (thread_arg > std::thread::hardware_concurrency())
-                {
-                    _threads = std::thread::hardware_concurrency();
-                }
+                if (thread_arg > _hardware_cores)
+                    _threads = _hardware_cores;
+                else
+                    _threads = (unsigned int)thread_arg;
             }
         }
+
     } // End of CLI parsing loop
 
-    // Validation (moved outside the loop)
-    if (_imgdir.empty() || _outdir.empty() || _size <= 0 || _quality <= 0)
+    if (!validate_params(_imgdir, _outdir, _size, _quality, _width, _height))
     {
-        cout << "Error:  --imgdir, --outdir, --size, and --quality are required parameters." << endl;
-        return 1;
-    }
-    if (_imgdir == _outdir)
-    {
-        cout << "Error: --imgdir and --outdir cannot be the same directory. It will rewrite the files" << endl;
-        return 1;
-    }
-    if (!std::filesystem::exists(_imgdir))
-    {
-        cout << "Error: Specified image directory does not exist: " << _imgdir << endl;
-        return 1;
+        return 1; // exit on invalid args
     }
 
     // creates outdir if it doesn't exist
@@ -136,7 +144,7 @@ int main(int argc, char *argv[], char *envp[])
     cout << "Using " << _threads << " threads for processing." << endl;
 
     // Lamda function. Pass referecne to local varriables as needed
-    auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, &_size, &_quality, &processedFileCount]()
+    auto resize_img_processor = [&fileIndex, &allImgFiles, &_outdir, &_size, &_quality, &processedFileCount, &_width, &_height]()
     {
         // Thread will run forever until all files are processed, either by this thread or others
         while (true)
@@ -148,7 +156,7 @@ int main(int argc, char *argv[], char *envp[])
                 break;
             }
 
-            ResizeImage(allImgFiles[index], _outdir, _size, _quality);
+            ResizeImage(allImgFiles[index], _outdir, _size, _quality, _width, _height);
             processedFileCount++;
         }
     };
@@ -156,16 +164,17 @@ int main(int argc, char *argv[], char *envp[])
     // Lamda function for monitoring progress
     auto monitor_worker = [&processedFileCount, &originalFileCount]()
     {
-        // cout percent complete and progress
+        unsigned short bar_width = 70;
+
         while (processedFileCount < originalFileCount)
         {
-            float percent = (float)processedFileCount.load() / originalFileCount * 100.0f;
-            //\r at the start moves the cursor back to the beginning of the line
-            //std::flush immediatley pushes the output to the terminal
-            cout << "\rProgress: " << processedFileCount << "/" << originalFileCount << " (" << percent << "%)" << std::flush;
+            print_progress(processedFileCount, originalFileCount);
+
             std::this_thread::sleep_for(std::chrono::milliseconds(40));
         }
-        cout << "\rProgress: " << processedFileCount << "/" << originalFileCount << " (100%)" << endl;
+
+        // Print final progress as 100%
+        print_progress(processedFileCount, originalFileCount);
     };
 
     std::thread monitor_thread = std::thread(monitor_worker);

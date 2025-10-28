@@ -1,1 +1,1 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/ImageCompress.dir/src/main.cpp.o CMakeFiles/ImageCompress.dir/src/image_processor.cpp.o -o ImageCompress  -lm 
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/ImageCompress.dir/src/main.cpp.o CMakeFiles/ImageCompress.dir/src/image_processor.cpp.o CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.o -o ImageCompress  -lm 
