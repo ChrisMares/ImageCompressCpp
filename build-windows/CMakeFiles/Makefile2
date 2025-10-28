@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/chris/git/ImageCompressCpp/build-windows
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/ImageCompressWin.dir/all
+all: CMakeFiles/ImageCompress.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/ImageCompressWin.dir/clean
+clean: CMakeFiles/ImageCompress.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/ImageCompressWin.dir
+# Target rules for target CMakeFiles/ImageCompress.dir
 
 # All Build rule for target.
-CMakeFiles/ImageCompressWin.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/chris/git/ImageCompressCpp/build-windows/CMakeFiles --progress-num=1,2,3,4 "Built target ImageCompressWin"
-.PHONY : CMakeFiles/ImageCompressWin.dir/all
+CMakeFiles/ImageCompress.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/chris/git/ImageCompressCpp/build-windows/CMakeFiles --progress-num=1,2,3,4 "Built target ImageCompress"
+.PHONY : CMakeFiles/ImageCompress.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/ImageCompressWin.dir/rule: cmake_check_build_system
+CMakeFiles/ImageCompress.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/git/ImageCompressCpp/build-windows/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ImageCompressWin.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/ImageCompress.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/chris/git/ImageCompressCpp/build-windows/CMakeFiles 0
-.PHONY : CMakeFiles/ImageCompressWin.dir/rule
+.PHONY : CMakeFiles/ImageCompress.dir/rule
 
 # Convenience name for target.
-ImageCompressWin: CMakeFiles/ImageCompressWin.dir/rule
-.PHONY : ImageCompressWin
+ImageCompress: CMakeFiles/ImageCompress.dir/rule
+.PHONY : ImageCompress
 
 # clean rule for target.
-CMakeFiles/ImageCompressWin.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/clean
-.PHONY : CMakeFiles/ImageCompressWin.dir/clean
+CMakeFiles/ImageCompress.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/clean
+.PHONY : CMakeFiles/ImageCompress.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

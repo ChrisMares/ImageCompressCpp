@@ -29,7 +29,7 @@ void print_progress(int processed, int total) {
     std::string bar_empty(bar_width - pos, ' ');
 
     // Print the bar with \r to return to the start of the line
-    std::cout << "[" << bar_filled << bar_empty << "] " << percent << " % (" << processed << "/" << total << ")" << "\r";
+    std::cout << "\r[" << bar_filled << bar_empty << "] " << percent << " % (" << processed << "/" << total << ")";
     std::cout.flush(); // Ensure it prints immediately
 }
 
@@ -175,6 +175,7 @@ int main(int argc, char *argv[], char *envp[])
 
         // Print final progress as 100%
         print_progress(processedFileCount, originalFileCount);
+        cout << endl << endl;
     };
 
     std::thread monitor_thread = std::thread(monitor_worker);

@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/x86_64-w64-mingw32-g++
 CXX_DEFINES = 
 
-CXX_INCLUDES = @CMakeFiles/ImageCompressWin.dir/includes_CXX.rsp
+CXX_INCLUDES = @CMakeFiles/ImageCompress.dir/includes_CXX.rsp
 
 CXX_FLAGS = -O3 -DNDEBUG -std=gnu++23
 

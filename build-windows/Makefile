@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ImageCompressWin
+# Target rules for targets named ImageCompress
 
 # Build rule for target.
-ImageCompressWin: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ImageCompressWin
-.PHONY : ImageCompressWin
+ImageCompress: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ImageCompress
+.PHONY : ImageCompress
 
 # fast build rule for target.
-ImageCompressWin/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/build
-.PHONY : ImageCompressWin/fast
+ImageCompress/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/build
+.PHONY : ImageCompress/fast
 
 src/arg_helper.obj: src/arg_helper.cpp.obj
 .PHONY : src/arg_helper.obj
 
 # target to build an object file
 src/arg_helper.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.obj
 .PHONY : src/arg_helper.cpp.obj
 
 src/arg_helper.i: src/arg_helper.cpp.i
@@ -142,7 +142,7 @@ src/arg_helper.i: src/arg_helper.cpp.i
 
 # target to preprocess a source file
 src/arg_helper.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.i
 .PHONY : src/arg_helper.cpp.i
 
 src/arg_helper.s: src/arg_helper.cpp.s
@@ -150,7 +150,7 @@ src/arg_helper.s: src/arg_helper.cpp.s
 
 # target to generate assembly for a file
 src/arg_helper.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/arg_helper.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/arg_helper.cpp.s
 .PHONY : src/arg_helper.cpp.s
 
 src/image_processor.obj: src/image_processor.cpp.obj
@@ -158,7 +158,7 @@ src/image_processor.obj: src/image_processor.cpp.obj
 
 # target to build an object file
 src/image_processor.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/image_processor.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/image_processor.cpp.obj
 .PHONY : src/image_processor.cpp.obj
 
 src/image_processor.i: src/image_processor.cpp.i
@@ -166,7 +166,7 @@ src/image_processor.i: src/image_processor.cpp.i
 
 # target to preprocess a source file
 src/image_processor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/image_processor.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/image_processor.cpp.i
 .PHONY : src/image_processor.cpp.i
 
 src/image_processor.s: src/image_processor.cpp.s
@@ -174,7 +174,7 @@ src/image_processor.s: src/image_processor.cpp.s
 
 # target to generate assembly for a file
 src/image_processor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/image_processor.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/image_processor.cpp.s
 .PHONY : src/image_processor.cpp.s
 
 src/main.obj: src/main.cpp.obj
@@ -182,7 +182,7 @@ src/main.obj: src/main.cpp.obj
 
 # target to build an object file
 src/main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/main.cpp.obj
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/main.cpp.obj
 .PHONY : src/main.cpp.obj
 
 src/main.i: src/main.cpp.i
@@ -190,7 +190,7 @@ src/main.i: src/main.cpp.i
 
 # target to preprocess a source file
 src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/main.cpp.i
 .PHONY : src/main.cpp.i
 
 src/main.s: src/main.cpp.s
@@ -198,7 +198,7 @@ src/main.s: src/main.cpp.s
 
 # target to generate assembly for a file
 src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompressWin.dir/build.make CMakeFiles/ImageCompressWin.dir/src/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ImageCompress.dir/build.make CMakeFiles/ImageCompress.dir/src/main.cpp.s
 .PHONY : src/main.cpp.s
 
 # Help Target
@@ -209,7 +209,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... ImageCompressWin"
+	@echo "... ImageCompress"
 	@echo "... src/arg_helper.obj"
 	@echo "... src/arg_helper.i"
 	@echo "... src/arg_helper.s"

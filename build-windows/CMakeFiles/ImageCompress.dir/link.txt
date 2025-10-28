@@ -1,0 +1,3 @@
+/usr/bin/cmake -E rm -f CMakeFiles/ImageCompress.dir/objects.a
+/usr/bin/x86_64-w64-mingw32-ar qc CMakeFiles/ImageCompress.dir/objects.a @CMakeFiles/ImageCompress.dir/objects1.rsp
+/usr/bin/x86_64-w64-mingw32-g++ -O3 -DNDEBUG -Wl,--whole-archive CMakeFiles/ImageCompress.dir/objects.a -Wl,--no-whole-archive -o ImageCompress.exe -Wl,--out-implib,libImageCompress.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles/ImageCompress.dir/linkLibs.rsp

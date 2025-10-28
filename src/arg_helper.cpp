@@ -29,8 +29,13 @@ Optional Arguments:
   --threads <num>        Number of threads to use. (default: CPU cores - 2)
   -h, --help             Show this help message and exit.
 
-Example:
-  $ ./ImageCompress --imgdir /path/to/images --outdir /path/to/output --size-factor 50 --quality 80
+Examples:
+  windows:
+    $ ./ImageCompress.exe --imgdir /path/to/images --outdir /path/to/output --size-factor 50 --quality 80
+    $ ./ImageCompress.exe --imgdir C:\Images --outdir C:\Output --width 800 --quality 90
+  linux:
+    $ ./ImageCompress --imgdir /path/to/images --outdir /path/to/output --height 600 --quality 75
+    $ ./ImageCompress --imgdir /home/user/images --outdir /home/user/output --imgname photo.png --quality 85
 )";
 }
 

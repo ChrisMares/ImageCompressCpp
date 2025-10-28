@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Set the executable name based on the target OS
 if(WIN32)
-    set(EXE_NAME ImageCompressWin)
+    set(EXE_NAME ImageCompress)
 else()
     set(EXE_NAME ImageCompress)
 endif()
