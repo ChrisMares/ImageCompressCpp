@@ -1,3 +1,0 @@
-/home/chris/git/ImageCompressCpp/build-linux-debug/CMakeFiles/ImageCompress.dir
-/home/chris/git/ImageCompressCpp/build-linux-debug/CMakeFiles/edit_cache.dir
-/home/chris/git/ImageCompressCpp/build-linux-debug/CMakeFiles/rebuild_cache.dir

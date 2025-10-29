@@ -38,3 +38,9 @@
 
 # debug information files
 *.dwo
+
+# Build directories
+build-linux-debug/
+build-linux-release/
+build-windows/
+build-common/
